@@ -1,7 +1,10 @@
 (defvar notmorg-monthnames '("Jan" "Feb" "Mar" "Apr" "May" "Jun" "Jul" "Aug" "Sep" "Oct" "Nov" "Dec")
   "monthnames for reading out dates from mail bodies")
 
-(defvar notmorg-date-extractors
+(defvar notmorg-date-extractors nil
+  "A list of functions of one parameter searching a body of text, returning a timestamp")
+
+(setf notmorg-date-extractors
   (list 
    (lambda (text) (progn
 	       (when (and text (string-match "\\([0-9]\\{1,2\\}\\) \\([A-Za-z]\\{3\\}\\) \\([0-9]\\{4\\}\\)" text))
@@ -9,8 +12,7 @@
 		       (month-index (position (match-string 2 text) ks-monthnames-lastfm :test #'string=))
 		       (year  (read (match-string 3 text))))
 		   (when month-index
-		     (encode-time 0 0 0 day (1- month-index) year)))))))
-  "A list of functions of one parameter searching a body of text, returning a timestamp")
+		     (encode-time 0 0 0 day (+ month-index 1) year))))))))
 
 (defun notmorg-from-tag (tag)
   "tag is string or (string todo-flag)"
