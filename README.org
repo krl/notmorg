@@ -1,0 +1,22 @@
+* About
+notmorg is a small duct-tape layer between notmuch and org mode agenda. It creates a .org file based on tags in your notmuch mail archive.
+* Credits/contact
+Written by Kristoffer Ström
+Questions can be directed at email host rymdkoloni.se, with local part kristoffer
+* License
+GPL v3 or later.
+* How to use
+Put notmorg.el in your emacs path and write something like this in your init file:
+
+: (require 'notmorg)
+: (add-hook 'org-finalize-agenda-hook (lambda ()
+:   (notmorg-write-file "/home/krille/org/notmorg.org" '("todo" t) "sched")))
+
+The arguments to notmuch-write file is the filename to be written. rest is a list of tags, with optional todo-flag which decides if written headers get a TODO-prefix.
+
+The script tries to read out dates from the body of the matched mails, and schedule them if they are in the feature.
+
+To add new regexps to this you can add functions to the list notmorg-date-extractors.
+These functions should take the text as input and produce nil or a emacs timestamp, for example 
+
+: (encode-time 0 0 0 day month year)
